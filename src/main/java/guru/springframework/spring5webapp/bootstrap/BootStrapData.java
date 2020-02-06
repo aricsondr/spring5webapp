@@ -24,36 +24,45 @@ public class BootStrapData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        try{
+        try {
+            System.out.println("Started in Bootstrap");
+
+            Publisher publisher = new Publisher();
+            publisher.setName("Porto Editora");
+            publisher.setCity("Porto");
+            publisher.setState("Po");
+
+            publisherRepository.save(publisher);
+
+            System.out.println("Number of publisher: " + publisherRepository.count());
+
             Author eric = new Author("Eric", "Evens");
             Book ddd = new Book("Domain Drive Design", "123123");
-            Publisher ed1 = new Publisher("Porto Editora", "Rua Nova Vilar", "Porto", "Centro", "4354534");
+
             eric.getBooks().add(ddd);
             ddd.getAuthors().add(eric);
-            ed1.getBooks().add(ddd);
+            ddd.setPublisher(publisher);
+            publisher.getBooks().add(ddd);
 
             authorRepository.save(eric);
             bookRepository.save(ddd);
-            publisherRepository.save(ed1);
+            publisherRepository.save(publisher);
 
             Author rod = new Author("Rod", "Jonshon");
             Book eee = new Book("J2EE Development Without EJB", "456456");
-            Publisher ed2 = new Publisher("London Publisher", "Hollyood", "London", "South of London", "897987451");
             rod.getBooks().add(eee);
             eee.getAuthors().add(rod);
-            ed2.getBooks().add(eee);
+            eee.setPublisher(publisher);
+            publisher.getBooks().add(eee);
 
             authorRepository.save(rod);
             bookRepository.save(eee);
-            publisherRepository.save(ed2);
+            publisherRepository.save(publisher);
 
-            System.out.println("Started in Bootstrap");
             System.out.println("Number of books: " + bookRepository.count());
-            System.out.println("Number of publisher: " + publisherRepository.count());
-        }
-        catch(Exception e)
-        {
-            System.out.println("Erro: " +e);
+            System.out.println("Publisher number of books: " + publisher.getBooks().size());
+        } catch (Exception e) {
+            System.out.println("Erro: " + e);
         }
     }
 }
